@@ -25,7 +25,7 @@ def get_team_urls():
     global session
     global fivb_url_base
 
-    url = fivb_url_base + '/en/men/teams'
+    url = fivb_url_base + '/en/women/teams'
 
     headers = {'accept-encoding': 'gzip, deflate, br', 'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;'}
 
@@ -84,7 +84,7 @@ def add_player(tds):
 def add_player_position(player, player_url):
     global session
     global fivb_url_base
-    url = fivb_url_base + player_url
+    url = fivb_url_base + player_url.replace("asl%3f", "").replace("asl?", "")
 
     headers = {'accept-encoding': 'gzip, deflate, br', 'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;'}
 
@@ -92,7 +92,13 @@ def add_player_position(player, player_url):
     
     player_soup: BeautifulSoup = BeautifulSoup(r.content, 'lxml')
 
-    player.position = player_soup.find("span", class_="role").parent()[1].text.strip()
+    try:
+        player.position = player_soup.find("span", class_="role").parent()[1].text.strip()
+    except:
+        print("Error encountered processing {}: no role could be found. Soup: {}".format(
+            player.name,
+            player_soup
+        ))
 
 def main(argv): 
     global players
