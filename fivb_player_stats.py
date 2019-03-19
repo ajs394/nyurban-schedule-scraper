@@ -7,7 +7,6 @@ import requests
 import progressbar
 from bs4 import BeautifulSoup
 from bs4.element import ResultSet
-from pyparsing import originalTextFor
 from requests.models import Response
 
 players = []
