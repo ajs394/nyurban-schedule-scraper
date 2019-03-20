@@ -1,5 +1,5 @@
 from web_client import get_soup_from_url
-from dnd_monster_dbo import monster, data_point
+from data.dnd_monster_dbo import monster, data_point
 import progressbar
 
 MONSTER_STATS = "MONSTER_STATS"

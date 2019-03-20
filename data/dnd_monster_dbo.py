@@ -3,7 +3,7 @@ from typing import Dict
 
 from tinydb import Query, TinyDB
 
-db = TinyDB('data/monsters.json')
+db = TinyDB('monsters.json')
 
 @dataclass
 class monster:

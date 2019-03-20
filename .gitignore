@@ -28,4 +28,3 @@ tmp/**
 .python-version
 .vs/
 *.pickle
-launch.json
