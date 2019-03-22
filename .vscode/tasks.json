@@ -5,9 +5,10 @@
     "tasks": [
         {
             "label": "Launch Current File As Python",
-            "command": "python",
+            "command": "${workspaceFolder}/pythonpath.bat",
             "type": "shell",
             "args": [
+                "${workspaceFolder}",
                 "${file}"
             ],
             "group": {

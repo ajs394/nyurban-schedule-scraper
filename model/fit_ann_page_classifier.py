@@ -1,21 +1,19 @@
+import os
+
+import numpy as np
 from keras.layers import Activation, Dense
 from keras.models import Sequential
 from keras.utils import np_utils
+from numpy import array
 from sklearn.model_selection import train_test_split
 from tinydb import TinyDB
-from numpy import array
-import numpy as np
-import os
 
 from data.dnd_monster_dbo import data_point_from_record
-from process_potential_dnd_page import FEATURE_SET
-
-DETAILED = [1, 0, 0]
-MONSTER = [0, 1, 0]
-NEITHER = [0, 0, 1]
+from data.features import DETAILED, FEATURE_SET, MONSTER, NEITHER
+from constants.data import db_name
 
 dirname = os.path.dirname(__file__)
-filename = os.path.join(dirname, '../data/monsters.json')
+filename = os.path.join(dirname, '../data/{}.json'.format(db_name))
 data_table = TinyDB(filename).table('data')
 
 data = data_table.all()
@@ -36,7 +34,9 @@ train_X, test_X, train_y, test_y = train_test_split(X, Y, train_size=0.5, test_s
 
 # Simple feed-forward architecture
 model = Sequential()
-model.add(Dense(16, input_shape=(len(FEATURE_SET),)))
+model.add(Dense(units=15, input_shape=(len(FEATURE_SET),)))
+model.add(Activation("sigmoid"))
+model.add(Dense(units=30))
 model.add(Activation("sigmoid"))
 model.add(Dense(units=3))
 model.add(Activation("softmax"))
@@ -46,11 +46,11 @@ model.compile(loss='categorical_crossentropy',
               optimizer='adam', metrics=['accuracy'])
  
 # Fit model in batches
-model.fit(train_X, train_y, epochs=100, batch_size=1)
+model.fit(train_X, train_y, epochs=36, batch_size=1)
  
 # Evaluate model
 loss, accuracy = model.evaluate(test_X, test_y, verbose=0)
 print("Accuracy = {:.2f}".format(accuracy))
 
-filename = os.path.join(dirname, 'home_monster_page_sequential_model.h5')
+filename = os.path.join(dirname, 'features_take_2_sequential_model.h5')
 model.save(filename)

@@ -1,6 +1,8 @@
 # nyurban-schedule-scraper
 Scrape calendar events from NYUrban website and publish to Google calendar
 
+Supplemental data can be found on ajs394's Google Drive under projects\web-scraper\data
+
 # Usage
 urban_schedule_script.py -u <username> -p <password> [-c <calendarName>] -t... <teamId>  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-u --username  
