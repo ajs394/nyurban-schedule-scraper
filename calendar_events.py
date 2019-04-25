@@ -11,6 +11,7 @@ from googleapiclient.discovery import build
 # If modifying these scopes, delete the file token.pickle.
 SCOPES = ['https://www.googleapis.com/auth/calendar']
 google_datetime_format = '%Y-%m-%dT%H:%M:%S'
+search_datetime_format = '%Y-%m-%dT%H:%M:%S.%fZ'
 
 _service = None
 
@@ -81,6 +82,17 @@ def add_event(external_event: schedule_event, calendar_name: str):
         },
     }
 
+    # get events for the day to check if event already exists, if same team and time delete old event
+    events_result = service.events().list(calendarId=calendar_name, timeMin=start_datetime.strftime(search_datetime_format),
+                                        maxResults=10, singleEvents=True,
+                                        orderBy='startTime').execute()
+    events = events_result.get('items', [])
+
+    for e in events:
+        if e['summary'] == event['summary'] and e['start']['dateTime'] == start_datetime.astimezone().isoformat():
+            service.events().delete(calendarId=calendar_name, eventId=e['id']).execute()
+
+    # upload new event
     event = service.events().insert(calendarId=calendar_name, body=event).execute()
 
     print("uploaded event ", event)
